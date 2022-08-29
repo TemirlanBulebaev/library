@@ -1,24 +1,37 @@
 package com.example.library;
 
-import response.Book;
+import com.example.library.model.Book;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Storage
 {
-    private static ArrayList<Book> books = new ArrayList<Book>();
+    private static int currentId = 1;
+    private static HashMap<Integer, Book> books = new HashMap<Integer, Book>();
 
     public static List<Book> getAllBooks()
     {
-        return books;
+        ArrayList<Book> bookList = new ArrayList<Book>();
+        bookList.addAll(books.values());
+        return bookList;
     }
 
     public static int addBook(Book book)
     {
-        int id = books.size() + 1;
+        int id = currentId++;
         book.setId(id);
-        books.add(book);
+        books.put(id, book);
         return id;
+    }
+
+    public static Book getBook(int bookId)
+    {
+        if (books.containsKey(bookId))
+        {
+            return  books.get(bookId);
+        }
+        return null;
     }
 }

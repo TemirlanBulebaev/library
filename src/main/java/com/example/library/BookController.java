@@ -1,25 +1,33 @@
 package com.example.library;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import response.Book;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.example.library.model.Book;
 
 import java.util.List;
 
 
 @RestController
-public class BookController
-{
-    @RequestMapping(value = "/books/", method = RequestMethod.GET)
-    public List<Book> list()
-    {
+public class BookController {
+    @GetMapping("/books/")
+    public List<Book> list() {
         return Storage.getAllBooks();
     }
 
-    @RequestMapping(value = "/books/", method = RequestMethod.POST)
-    public int add(Book book)
-    {
+    @PostMapping("/books/")
+    public int add(Book book) {
         return Storage.addBook(book);
     }
+
+    @GetMapping("/books/{id}")
+    public ResponseEntity get(@PathVariable int id)
+    {
+        Book book = Storage.getBook(id);
+        if (book ==null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return new ResponseEntity(book, HttpStatus.OK);
+    }
+    
 }
